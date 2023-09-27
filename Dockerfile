@@ -11,9 +11,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN apt-get update && \
     apt-get install -y ffmpeg
 
-
 # copy bot code into container
 COPY . .
+
+# expose port
+EXPOSE 8080
 
 # start bot
 CMD ["python", "main.py"]
