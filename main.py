@@ -3,6 +3,7 @@ import discord
 from discord.ext import commands
 import yt_dlp as youtube_dl
 import asyncio
+from fastapi import FastAPI
 
 intents = discord.Intents().all()
 client = discord.Client(intents=intents)
@@ -109,5 +110,12 @@ async def stop_music(ctx):
         await voice_client.disconnect()
         await ctx.send(f"{ctx.author.name} stopped the player!")
 
+
+app = FastAPI()
+
+
+@app.get("/health")
+async def health_check():
+    return {"status": "OK"}
 
 bot.run(os.environ["DISCORD_TOKEN"])
