@@ -14,5 +14,8 @@ RUN apt-get update && \
 # copy bot code into container
 COPY . .
 
+# expose port
+EXPOSE 8080
+
 # start bot
 CMD ["python", "main.py"]
