@@ -4,6 +4,7 @@ from discord.ext import commands
 import yt_dlp as youtube_dl
 import asyncio
 from fastapi import FastAPI
+import uvicorn
 
 intents = discord.Intents().all()
 client = discord.Client(intents=intents)
@@ -114,8 +115,10 @@ async def stop_music(ctx):
 app = FastAPI()
 
 
-@app.get("/")
+@app.get("/health")
 async def health_check():
     return {"status": "OK"}
 
-bot.run(os.environ["DISCORD_TOKEN"])
+if __name__ == "__main__":
+    bot.run(os.environ["DISCORD_TOKEN"])
+    uvicorn.run(app, host="0.0.0.0", port=8080)
