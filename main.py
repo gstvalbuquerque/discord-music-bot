@@ -114,7 +114,7 @@ async def stop_music(ctx):
 app = FastAPI()
 
 
-@app.get("/health")
+@app.get("/")
 async def health_check():
     return {"status": "OK"}
 
