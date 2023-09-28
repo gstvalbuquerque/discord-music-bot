@@ -111,7 +111,6 @@ async def stop_music(ctx):
         await voice_client.disconnect()
         await ctx.send(f"{ctx.author.name} stopped the player!")
 
-
 app = FastAPI()
 
 
@@ -119,6 +118,23 @@ app = FastAPI()
 async def health_check():
     return {"status": "OK"}
 
+
+async def run_bot():
+    await bot.start(os.environ["DISCORD_TOKEN"])
+
 if __name__ == "__main__":
-    bot.run(os.environ["DISCORD_TOKEN"])
-    uvicorn.run(app, host="0.0.0.0", port=8080)
+    loop = asyncio.get_event_loop()
+
+    bot_task = loop.create_task(run_bot())
+
+    async def run_web_server():
+        config = uvicorn.Config(app, host="0.0.0.0", port=8080)
+        server = uvicorn.Server(config)
+        await server.serve()
+
+    web_server_task = loop.create_task(run_web_server())
+
+    try:
+        loop.run_until_complete(asyncio.gather(bot_task, web_server_task))
+    except KeyboardInterrupt:
+        loop.run_until_complete(bot.close())
